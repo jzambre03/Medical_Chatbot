@@ -307,5 +307,5 @@ Enter your medical question: asthma
 4. Add support for medical image analysis
 5. Implement real-time medical information updates
 
-## Contact
-For questions or feedback, please contact: zara@supportiv.com 
+## Notes
+This project was completed without the use of any AI assistants or chatbot tools.
