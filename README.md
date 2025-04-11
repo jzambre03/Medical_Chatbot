@@ -67,7 +67,7 @@ The requirements.txt file includes:
 ## Model Architecture and Training
 
 ### Architecture Selection
-The system uses a two-stage RAG (Retrieval-Augmented Generation) approach:
+The system uses a two-stage RAG (Retrieval-Augmented Generation) approach, specifically designed for medical question answering:
 
 #### Stage 1: Retrieval System
 - **Model**: Sentence-BERT (all-MiniLM-L6-v2)
@@ -91,7 +91,63 @@ The system uses a two-stage RAG (Retrieval-Augmented Generation) approach:
   - Uses beam search (4 beams) for better quality
   - Temperature: 0.7 for controlled randomness
 
-### Training Process
+### How the System Processes User Queries
+
+1. **Question Input and Validation**
+   - User enters a medical question
+   - System validates the question format and completeness
+   - Fallback mechanism provides guidance for incomplete questions
+
+2. **Context Retrieval Process**
+   - Question is converted to embedding vector
+   - System searches for most relevant medical passages
+   - Top-k (5) most relevant contexts are retrieved
+   - Contexts are ranked by semantic similarity
+
+3. **Answer Generation Process**
+   - Retrieved contexts are combined with the question
+   - Input is formatted: "question: [user question] context: [retrieved passages]"
+   - Model generates answer using beam search
+   - Temperature controls randomness in generation
+   - Answer is decoded and returned to user
+
+4. **Quality Control Mechanisms**
+   - Minimum context length requirement
+   - Semantic similarity threshold
+   - Beam search for diverse answers
+   - Temperature control for answer quality
+
+### Example Query Processing
+
+1. **User Question**: "What are the symptoms of asthma?"
+   
+2. **Processing Steps**:
+   ```
+   a. Question Validation:
+      - Checks for proper medical question format
+      - Verifies question completeness
+      - Identifies medical topic (symptoms)
+
+   b. Context Retrieval:
+      - Converts question to embedding
+      - Searches medical knowledge base
+      - Retrieves top 5 relevant passages about asthma symptoms
+
+   c. Answer Generation:
+      - Combines question and contexts
+      - Generates answer using beam search
+      - Ensures medical accuracy
+      - Returns comprehensive response
+   ```
+
+3. **Output**:
+   ```
+   Answer: Asthma symptoms include shortness of breath, chest tightness, wheezing, and coughing. 
+   These symptoms often worsen at night or early morning, and can be triggered by various 
+   factors such as exercise, allergens, or cold air.
+   ```
+
+### Model Training Process
 1. **Model Selection**
    - Chose Flan-T5-small for balance between performance and resource requirements
    - Pre-trained on medical domain data
